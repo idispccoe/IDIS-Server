@@ -29,20 +29,48 @@ public class MainController {
     }
 	
 	@RequestMapping("/waterLevel")
-    public ServerResponse checkWaterLevel() {       
-		int randomInt = randomGenerator.nextInt(100);
+    public ServerResponse checkWaterLevel() {
+		SimpleRead.resetCurrentStatus();
+		SimpleRead.sendWaterLevelCmd();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String currStatus = SimpleRead.getCurrentStatus();
+		currStatus.trim();
+		System.out.println(currStatus);
 		ServerResponse res = new ServerResponse();
 		res.setId("1");
-		res.setContent(""+randomInt);
+		res.setContent("0");
+		if(currStatus!=null && !currStatus.isEmpty()){
+			Integer waterlevel = new Integer(currStatus);
+			
+			int randomInt = waterlevel.intValue();//randomGenerator.nextInt(100);
+			randomInt = randomInt/3;		
+			res.setContent(""+randomInt);
+		}
         return res;
     }	
 	
 	@RequestMapping("/sensorStatus")
-    public ServerResponse checkSensorStatus() {       
-		double randomDouble = randomGenerator.nextDouble();
+    public ServerResponse checkSensorStatus() {
+		SimpleRead.resetCurrentStatus();
+		SimpleRead.sendAllSensorCmd();
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String currStatus = SimpleRead.getCurrentStatus();
+		currStatus.trim();
+		System.out.println(currStatus);
+		//double randomDouble = randomGenerator.nextDouble();
 		ServerResponse res = new ServerResponse();
 		res.setId("1");
-		res.setContent("Sensor Status: "+randomDouble);
+		res.setContent(currStatus);
         return res;
     }	
 }

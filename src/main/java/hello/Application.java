@@ -1,5 +1,9 @@
 package hello;
 
+import java.util.Enumeration;
+
+import gnu.io.CommPortIdentifier;
+
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -15,7 +19,22 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @EnableAutoConfiguration
 public class Application {
+	//static CommPortIdentifier portId;
+	//static Enumeration portList;
+	
 	public static void main(String[] args) {
+		
+		SimpleRead.portList = CommPortIdentifier.getPortIdentifiers();
+
+        while (SimpleRead.portList.hasMoreElements()) {
+        	SimpleRead.portId = (CommPortIdentifier) SimpleRead.portList.nextElement();
+            if (SimpleRead.portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                 if (SimpleRead.portId.getName().equals("COM4")) {
+                    SimpleRead reader = new SimpleRead();
+                }
+            }
+        }
+		
 		JobDetail job = JobBuilder.newJob(SensorJob.class)
 				.withIdentity("sensorJob", "group1").build();
 
@@ -25,7 +44,7 @@ public class Application {
 				.withIdentity("sensorJobTrigger", "group1")
 				.withSchedule(
 						SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInMinutes(1).repeatForever())
+						.withIntervalInSeconds(120).repeatForever())
 						.build();
 
 		// schedule it
