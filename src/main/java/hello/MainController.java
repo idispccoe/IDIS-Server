@@ -1,7 +1,11 @@
 package hello;
 
 
-import java.util.Random;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,14 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 	
-	private Random randomGenerator = new Random();
-    
+	private MongoDAOImpl mongoDaoImpl = MongoDAOImpl.getInstance();
+	private DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	private Date startTime = new Date();
+	private Date stopTime = new Date();
 
 	@RequestMapping("/start")
     public ServerResponse startMotor() {       
 		ServerResponse res = new ServerResponse();
 		res.setId("1");
 		res.setContent("Motor started successfully");
+		Map<String, String> data = new HashMap<String, String>();
+		startTime = new Date();
+		data.put("datetime", df.format(startTime));
+		data.put("status", "ON");
+		try{
+			mongoDaoImpl.insert("motorStatus", data);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
         return res;
     }	
 	
@@ -25,6 +40,17 @@ public class MainController {
 		ServerResponse res = new ServerResponse();
 		res.setId("1");
 		res.setContent("Motor stopped successfully");
+		Map<String, String> data = new HashMap<String, String>();
+		stopTime = new Date();
+		data.put("datetime", df.format(stopTime));
+		data.put("status", "OFF");
+		Long totalONTime = stopTime.getTime()-startTime.getTime();
+		data.put("totalONtime", totalONTime.toString());
+		try{
+			mongoDaoImpl.insert("motorStatus", data);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
         return res;
     }
 	

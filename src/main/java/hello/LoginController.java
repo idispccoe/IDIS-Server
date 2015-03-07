@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 	
-	private MongoDAOImpl mongoDaoImpl = new MongoDAOImpl();
+	private MongoDAOImpl mongoDaoImpl = MongoDAOImpl.getInstance();
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
     public void login(HttpServletRequest request, HttpServletResponse response) {       
@@ -19,6 +19,7 @@ public class LoginController {
         String password = request.getParameter("password");  
         if(username!=null && password!=null){
         	if(mongoDaoImpl.login(username, password)){
+        	//if(username.equals("idis@pccoe.com") && password.equals("pccoe")){
     			System.out.println("Authentication success :"+username);
                 response.addHeader("IS_VALID", "yes");
     		}

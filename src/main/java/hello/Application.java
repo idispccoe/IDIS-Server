@@ -1,7 +1,5 @@
 package hello;
 
-import java.util.Enumeration;
-
 import gnu.io.CommPortIdentifier;
 
 import org.quartz.JobBuilder;
@@ -19,8 +17,6 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @EnableAutoConfiguration
 public class Application {
-	//static CommPortIdentifier portId;
-	//static Enumeration portList;
 	
 	public static void main(String[] args) {
 		
