@@ -18,8 +18,8 @@ public class LoginController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");  
         if(username!=null && password!=null){
-        	if(mongoDaoImpl.login(username, password)){
-        	//if(username.equals("idis@pccoe.com") && password.equals("pccoe")){
+        	//if(mongoDaoImpl.login(username, password)){
+        	if(username.equals("idis@pccoe.com") && password.equals("pccoe")){
     			System.out.println("Authentication success :"+username);
                 response.addHeader("IS_VALID", "yes");
     		}

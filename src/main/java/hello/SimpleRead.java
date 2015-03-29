@@ -20,20 +20,6 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
     
     private static String currentStatus = "";
 
-/*    public static void main(String[] args) {
-        portList = CommPortIdentifier.getPortIdentifiers();
-
-        while (portList.hasMoreElements()) {
-            portId = (CommPortIdentifier) portList.nextElement();
-            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                 if (portId.getName().equals("COM4")) {
-			//                if (portId.getName().equals("/dev/term/a")) {
-                    SimpleRead reader = new SimpleRead();
-                }
-            }
-        }
-    }*/
-
     public SimpleRead() {
         try {
             serialPort = (SerialPort) portId.open("SimpleReadApp", 2000);
@@ -54,19 +40,35 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
         } catch (UnsupportedCommOperationException e) {System.out.println(e);}
         readThread = new Thread(this);
         readThread.start();
-        /*try {
-			//outputStream.write("*4".getBytes());
+    }
+    public static void sendMotorStartCmd(){
+    	try {
+			outputStream.write("1".getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+    }
+    
+    public static void sendMotorStopCmd(){
+    	try {
+			outputStream.write("2".getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static void sendResetCmd(){
+    	try {
+			outputStream.write("3".getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     public static void sendWaterLevelCmd(){
     	try {
-			outputStream.write("*3".getBytes());
+			outputStream.write("4".getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -79,11 +81,26 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
     	return currentStatus;
     }
     
-    public static void sendAllSensorCmd(){
+    public static void sendWaterFlowMeterCmd(){
     	try {
-			outputStream.write("*4".getBytes());
+			outputStream.write("5".getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void sendSensor1Cmd(){
+    	try {
+			outputStream.write("6".getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static void sendSensor2Cmd(){
+    	try {
+			outputStream.write("7".getBytes());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
@@ -108,16 +125,11 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
             break;
         case SerialPortEvent.DATA_AVAILABLE:
             byte[] readBuffer = new byte[1];
-            //System.out.println("Data Available");
             try {            	
             	String currRead = "";
                 while (inputStream.available() > 0) {
                     int numBytes = inputStream.read(readBuffer);
-                    //System.out.println(inputStream.read());
-                    //currentStatus += new String(readBuffer);
-                    //System.out.println(numBytes);
                     currRead = new String(readBuffer);
-                    //System.out.println("Data:  "+currRead);
                     if(currRead!=null){
                     	if(currRead.equals("*")){
                     		currentStatus = "";
@@ -127,7 +139,6 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
                     	}
                     }
                 }
-                //System.out.println("Current Status:  "+currentStatus);
             } catch (IOException e) {System.out.println(e);}
             break;
         }

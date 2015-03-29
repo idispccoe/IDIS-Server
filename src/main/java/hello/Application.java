@@ -40,7 +40,7 @@ public class Application {
 				.withIdentity("sensorJobTrigger", "group1")
 				.withSchedule(
 						SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInSeconds(120).repeatForever())
+						.withIntervalInMinutes(10).repeatForever())
 						.build();
 
 		// schedule it

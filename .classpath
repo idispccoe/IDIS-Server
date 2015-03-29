@@ -67,5 +67,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/RXTXcomm.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/jxl-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/org.apache.felix.webconsole-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/poi-ooxml-3.5-beta4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
