@@ -277,4 +277,12 @@ public class MainController {
 		}
 		return null;
 	}
+	
+	@RequestMapping("/findMarchData")
+    public ServerResponse findMarchData() {
+		ServerResponse res = new ServerResponse();
+		res.setId("1");
+		res.setContent("Total Water Used in March: "+mongoDaoImpl.findMonthlyWaterFlownData("3","15"));
+        return res;
+    }
 }

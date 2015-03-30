@@ -6,10 +6,13 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import scala.annotation.meta.getter;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -43,7 +46,7 @@ public class MongoDAOImpl {
 			waterLevelColl = db.getCollection("waterLevel");
 			waterFlowMeterColl = db.getCollection("waterFlowMeter");
 			motorStatusColl = db.getCollection("motorStatus");
-			motorStatusColl = db.getCollection("ActivityLog");
+			activityLogColl = db.getCollection("ActivityLog");
 			tableCollectionMap.put("users", userColl);
 			tableCollectionMap.put("sensor1", sensor1Coll);
 			tableCollectionMap.put("sensor2", sensor2Coll);
@@ -106,4 +109,27 @@ public class MongoDAOImpl {
 			}
 		}
 	}
+	
+	public String findMonthlyWaterFlownData(String monthNo, String year){
+		BasicDBObject findQuery = new  BasicDBObject();
+		findQuery.put("DateTime",  java.util.regex.Pattern.compile(monthNo+"/[0-9]*/"+year+" *"));//3/1/15 8:15
+		DBCursor cursor = activityLogColl.find(findQuery);
+		Double totalWaterFlown = new Double(0);
+		try {
+			if(cursor.hasNext()) {
+				while(cursor.hasNext()){
+					DBObject dbObject = cursor.next();
+					if(dbObject!=null && dbObject.get("TotalWaterFlown")!=null){
+						System.out.println("Date: "+dbObject.get("DateTime").toString()+" WaterFlown: "+dbObject.get("TotalWaterFlown").toString());
+						totalWaterFlown += Double.valueOf(dbObject.get("TotalWaterFlown").toString());
+					}
+				}
+			}
+		} finally {
+			cursor.close();
+		}
+		return totalWaterFlown.toString();
+	}
+	
+	
 }

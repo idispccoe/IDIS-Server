@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class Application {
 	
 	public static void main(String[] args) {
-		
+		/*
 		SimpleRead.portList = CommPortIdentifier.getPortIdentifiers();
 
         while (SimpleRead.portList.hasMoreElements()) {
@@ -51,7 +51,7 @@ public class Application {
 		} catch (SchedulerException e) {
 			System.out.println("Could not start SensorJobScheduler!!!");
 			e.printStackTrace();
-		}
+		}*/
         SpringApplication.run(Application.class, args);
     }
 }
